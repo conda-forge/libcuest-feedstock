@@ -32,12 +32,15 @@ requirements:
 outputs:
   - name: libcuest
     build:
+      missing_dso_whitelist:
+        - "*libcuda.so*"              # driver, not provided by any conda package
       # Ignore run_exports on cuda-version which we need to add to avoid hash collision as we have multiple CTK support
       ignore_run_exports:
         - cuda-version
       # cuda-version will take care of constraining versions for the following
       # and thus we should ignore the run exports from them which are more strict
       ignore_run_exports_from:
+        - cuda-nvrtc-dev
         - libcublas-dev
         - libcusolver-dev
         - libcusparse-dev
@@ -51,6 +54,7 @@ outputs:
         - {{ stdlib("c") }}
         - {{ compiler('cuda') }}
       host:
+        - cuda-nvrtc-dev
         - libcublas-dev
         - libcusolver-dev
         - libcusparse-dev
@@ -60,6 +64,7 @@ outputs:
         - libcublas
         - libcusolver
         - libcusparse
+        - cuda-nvrtc
         - libnvjitlink
         - {{ pin_compatible('cuda-version', max_pin='x', min_pin='x') }}
     test:
