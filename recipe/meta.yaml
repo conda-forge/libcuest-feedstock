@@ -1,5 +1,5 @@
 {% set name = "libcuest" %}
-{% set version = "0.1.1.1" %}
+{% set version = "0.2.0.4" %}
 {% set cuda_compiler_version = cuda_compiler_version | default("None") %}
 {% set abiversion = version.split('.')[0] %}
 {% set majorminorpatch = '.'.join(version.split('.')[:3]) %}
@@ -16,13 +16,13 @@ package:
 source:
   url: https://developer.download.nvidia.com/compute/cuest/redist/{{ name }}/{{ platform }}/{{ name }}-{{ platform }}-{{ version }}_cuda12-archive.{{ extension }}  # [(cuda_compiler_version or "").startswith("12")]
   url: https://developer.download.nvidia.com/compute/cuest/redist/{{ name }}/{{ platform }}/{{ name }}-{{ platform }}-{{ version }}_cuda13-archive.{{ extension }}  # [(cuda_compiler_version or "").startswith("13")]
-  sha256: 25e4b38ab3996c4c8ac5cbe372fce050eaa3a9cea1efd120165d78e735967c5b  # [linux64 and (cuda_compiler_version or "").startswith("12")]]
-  sha256: 0a4dbaab73bf78d1a4a11ce0bc9f503fc70b0c24559c0e46d782f0fc688599ba  # [linux64 and (cuda_compiler_version or "").startswith("13")]]
-  sha256: 8514f370bae8ada4d2d9b4ab461ad9fe0b61533b5b2a65c35a3ff97f9a919d50  # [linux and aarch64 and (cuda_compiler_version or "").startswith("12")]]
-  sha256: a67893e5176d6cc840326af1f0d938d803ca7d353bde0d1e1c503f4050750360  # [linux and aarch64 and (cuda_compiler_version or "").startswith("13")]]
+  sha256: 50ffc9cd2b4ffd038747271b8a0aaf869050fdac9301167dc7bff46254529f16  # [linux64 and (cuda_compiler_version or "").startswith("12")]]
+  sha256: 5861ad9c2f2338d691c6fa89012f7b512c1a9a7062edc9838566acd07155cc64  # [linux64 and (cuda_compiler_version or "").startswith("13")]]
+  sha256: 2afc0e95945bf574e6f76c0747ba9f4a51c231b0f42d3809cef9e368c8443718  # [linux and aarch64 and (cuda_compiler_version or "").startswith("12")]]
+  sha256: 31aaad50f392395fdbbd3ef5d961cff767d11fd1171f31b1002f2b2ec435a08f  # [linux and aarch64 and (cuda_compiler_version or "").startswith("13")]]
 
 build:
-  number: 1
+  number: 0
   skip: true  # [not (linux64 or aarch64) or cuda_compiler_version in ("None", "")]
 
 requirements:
@@ -32,12 +32,15 @@ requirements:
 outputs:
   - name: libcuest
     build:
+      missing_dso_whitelist:
+        - "*libcuda.so*"              # driver, not provided by any conda package
       # Ignore run_exports on cuda-version which we need to add to avoid hash collision as we have multiple CTK support
       ignore_run_exports:
         - cuda-version
       # cuda-version will take care of constraining versions for the following
       # and thus we should ignore the run exports from them which are more strict
       ignore_run_exports_from:
+        - cuda-nvrtc-dev
         - libcublas-dev
         - libcusolver-dev
         - libcusparse-dev
@@ -51,6 +54,7 @@ outputs:
         - {{ stdlib("c") }}
         - {{ compiler('cuda') }}
       host:
+        - cuda-nvrtc-dev
         - libcublas-dev
         - libcusolver-dev
         - libcusparse-dev
@@ -60,6 +64,7 @@ outputs:
         - libcublas
         - libcusolver
         - libcusparse
+        - cuda-nvrtc
         - libnvjitlink
         - {{ pin_compatible('cuda-version', max_pin='x', min_pin='x') }}
     test:
