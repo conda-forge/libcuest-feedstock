@@ -1,5 +1,5 @@
 {% set name = "libcuest" %}
-{% set version = "0.2.1.2" %}
+{% set version = "0.2.2.2" %}
 {% set cuda_compiler_version = cuda_compiler_version | default("None") %}
 {% set abiversion = version.split('.')[0] %}
 {% set majorminorpatch = '.'.join(version.split('.')[:3]) %}
@@ -16,10 +16,10 @@ package:
 source:
   url: https://developer.download.nvidia.com/compute/cuest/redist/{{ name }}/{{ platform }}/{{ name }}-{{ platform }}-{{ version }}_cuda12-archive.{{ extension }}  # [(cuda_compiler_version or "").startswith("12")]
   url: https://developer.download.nvidia.com/compute/cuest/redist/{{ name }}/{{ platform }}/{{ name }}-{{ platform }}-{{ version }}_cuda13-archive.{{ extension }}  # [(cuda_compiler_version or "").startswith("13")]
-  sha256: 00d645b254ec1ba1f139e13a8b8a5348229d03ec929411c0fd85c3abd7819a42  # [linux64 and (cuda_compiler_version or "").startswith("12")]]
-  sha256: 61b0463a51722b591cc36c65fa29565cb6af2a539842eebc679aedf65f451085  # [linux64 and (cuda_compiler_version or "").startswith("13")]]
-  sha256: 95516770a22228cb819852e7f811da85a96871740e7beba3aede54b263010403  # [linux and aarch64 and (cuda_compiler_version or "").startswith("12")]]
-  sha256: e64e5b7ca985204fcf2cd21953d90337b70f3cb252965bf38ee6a5bd95bc8401  # [linux and aarch64 and (cuda_compiler_version or "").startswith("13")]]
+  sha256: 03417f0a2dfa4ef436a2ea30800a44856b1ab3b8b46fac92cbec2e1c8b4fda10  # [linux64 and (cuda_compiler_version or "").startswith("12")]]
+  sha256: 71641ba4aaa068dad037b9837f6fd0920edb7283f8297eccb9bedba6f405d228  # [linux64 and (cuda_compiler_version or "").startswith("13")]]
+  sha256: b5a19206e49b7df30080260123649063f8d9e730458634d764fe87f6f02466a6  # [linux and aarch64 and (cuda_compiler_version or "").startswith("12")]]
+  sha256: 413e9050d2c1e998a0a6eb803e1c468217fbeebe25e5e80068c22b5ce8e66c31  # [linux and aarch64 and (cuda_compiler_version or "").startswith("13")]]
 
 build:
   number: 0
